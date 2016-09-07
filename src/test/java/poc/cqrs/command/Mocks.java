@@ -1,23 +1,27 @@
 package poc.cqrs.command;
 
+import java.util.UUID;
+
 public class Mocks {
 	public static class ACommand implements Command {
 	}
 	
-	@HandlerFor(ACommand.class)
+	@CommandHandlerFor(command = ACommand.class, path = "/a-command")
 	public static class ACommandHandler implements CommandHandler<ACommand> {
 		@Override
-		public void handle(ACommand command) throws InvalidCommandException {
+		public UUID handle(ACommand command) throws InvalidCommandException {
+			return null;
 		}
 	}
 
 	public static class AnotherCommand implements Command {
 	}
 	
-	@HandlerFor(AnotherCommand.class)
+	@CommandHandlerFor(command = AnotherCommand.class, path = "/another-command")
 	public static class AnotherCommandHandler implements CommandHandler<AnotherCommand> {
 		@Override
-		public void handle(AnotherCommand command) throws InvalidCommandException {
+		public UUID handle(AnotherCommand command) throws InvalidCommandException {
+			return null;
 		}
 	}
 }

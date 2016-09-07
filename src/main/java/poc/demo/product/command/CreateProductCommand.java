@@ -1,5 +1,8 @@
 package poc.demo.product.command;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import poc.cqrs.command.Command;
 
 /**
@@ -9,7 +12,8 @@ public class CreateProductCommand implements Command {
 
 	private String name;
 	
-	public CreateProductCommand(String name) {
+	@JsonCreator
+	public CreateProductCommand(@JsonProperty("name") String name) {
 		this.name = name;
 	}
 	

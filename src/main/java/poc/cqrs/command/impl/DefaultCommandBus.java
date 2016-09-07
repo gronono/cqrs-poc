@@ -1,5 +1,7 @@
 package poc.cqrs.command.impl;
 
+import java.util.UUID;
+
 import poc.cqrs.command.Command;
 import poc.cqrs.command.CommandBus;
 import poc.cqrs.command.CommandDispatcher;
@@ -23,8 +25,8 @@ public class DefaultCommandBus implements CommandBus {
 		this.dispatcher = dispatcher;
 	}
 	
-	public void send(Command command) throws InvalidCommandException {
+	public UUID send(Command command) throws InvalidCommandException {
 		CommandHandler<Command> handler = dispatcher.dispatch(command);
-		handler.handle(command);
+		return handler.handle(command);
 	}
 }

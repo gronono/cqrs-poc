@@ -1,5 +1,7 @@
 package poc.cqrs.command;
 
+import java.util.UUID;
+
 /**
  * <p>
  * 	Effectue les actions décrites dans la {@link Command}.
@@ -8,8 +10,7 @@ package poc.cqrs.command;
  * 	Le choix du {@link CommandHandler} est délégué à une {@link CommandDispatcher}.
  * </p>
  */
-@FunctionalInterface
 public interface CommandBus {
 
-	void send(Command command) throws InvalidCommandException;
+	UUID send(Command command) throws InvalidCommandException;
 }

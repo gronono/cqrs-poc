@@ -10,9 +10,13 @@ import org.springframework.context.annotation.Bean;
 import poc.cqrs.command.CommandBus;
 import poc.cqrs.command.CommandDispatcher;
 import poc.cqrs.command.CommandHandler;
+import poc.cqrs.command.CommandRegistry;
+import poc.cqrs.command.CommandController;
 import poc.cqrs.command.InvalidCommandException;
 import poc.cqrs.command.impl.DefaultCommandBus;
+import poc.cqrs.command.impl.DefaultCommandController;
 import poc.cqrs.command.impl.DefaultCommandDispatcher;
+import poc.cqrs.command.impl.DefaultCommandRegistry;
 import poc.demo.product.command.CreateProductCommand;
 
 @SpringBootApplication
@@ -20,6 +24,17 @@ public class DemoApplication {
 
 	public static void main(String[] args) throws InvalidCommandException {
 		SpringApplication.run(DemoApplication.class, args);
+	}
+	
+	@Bean
+	public CommandRegistry commandRegistry(List<CommandHandler<?>> handlers) {
+		// TODO Globaliser la liste avec celle du CommandBus.
+		return new DefaultCommandRegistry(handlers);
+	}
+	
+	@Bean
+	public CommandController CommandController(CommandRegistry registry, CommandBus commandBus) {
+		return new DefaultCommandController(registry, commandBus);
 	}
 	
 	@Bean
