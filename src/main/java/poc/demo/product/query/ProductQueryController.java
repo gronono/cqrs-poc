@@ -29,5 +29,4 @@ public class ProductQueryController {
 	public Product get(@PathVariable UUID id) {
 		return repo.findOne(id);
 	}
-	
 }
