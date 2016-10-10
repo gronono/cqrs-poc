@@ -1,29 +1,26 @@
 package poc.cqrs.command.impl;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Map;
 
-import poc.cqrs.command.Command;
-import poc.cqrs.command.CommandHandler;
-import poc.cqrs.command.CommandHandlerFor;
 import poc.cqrs.command.CommandRegistry;
 
+/**
+ * Implémenetation de {@link CommandRegistry}.
+ */
 public class DefaultCommandRegistry implements CommandRegistry {
 
-	private List<CommandHandler<?>> handlers;
-	
-	public DefaultCommandRegistry(List<CommandHandler<?>> handlers) {
-		this.handlers = Collections.unmodifiableList(handlers);
-	}
+	private Map<String, Class<?>> commands;
 
+	/**
+	 * @param commands L'ensemble des commandes connues du système. Non null.
+	 */
+	public DefaultCommandRegistry(Map<String, Class<?>> commands) {
+		this.commands = Collections.unmodifiableMap(commands);
+	}
+	
 	@Override
-	public Class<? extends Command> findCommandClass(String id) {
-		return this.handlers.stream()
-			.map(handler -> handler.getClass())
-			.map(handlerClass -> handlerClass.getAnnotation(CommandHandlerFor.class))
-			.filter(handlerFor -> handlerFor.path().equals(id))
-			.findFirst()
-			.get()
-			.command();
+	public Map<String, Class<?>> getCommands() {
+		return commands;
 	}
 }

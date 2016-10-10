@@ -1,4 +1,4 @@
-package poc.demo.product;
+package poc.demo.product.query;
 
 import java.util.UUID;
 

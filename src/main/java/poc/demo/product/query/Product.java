@@ -1,4 +1,4 @@
-package poc.demo.product;
+package poc.demo.product.query;
 
 import java.util.UUID;
 
@@ -21,7 +21,7 @@ public class Product {
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     @Column(columnDefinition = "BINARY(16)")
-    private UUID uuid;
+    private UUID id;
 		
 	private String name;
 	

@@ -1,13 +1,12 @@
 package poc.cqrs.command;
 
-public interface CommandRegistry {
+import java.util.Map;
 
+@FunctionalInterface
+public interface CommandRegistry {
+	
 	/**
-	 * Donne la classe de la commande à partir de l'identifiant de la commande.
-	 * 
-	 * @param id L'identifiant de la commande.
-	 * 
-	 * @return La classe de la commande
+	 * @return L'ensemble des commandes connues du système. Non null, non modifiable.
 	 */
-	Class<? extends Command> findCommandClass(String path);
+	public Map<String, Class<?>> getCommands();
 }

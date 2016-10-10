@@ -2,7 +2,7 @@ package poc.cqrs.command;
 
 /**
  * Déclenchée lorsqu'une commande est invalide. 
- * C'est à dire que le {@link CommandHandler} associé n'a pas pu/voulu la traiter. 
+ * C'est à dire que le {@link CommandHandler} associé n'a pas voulu la traiter. 
  */
 public class InvalidCommandException extends Exception {
 

@@ -9,9 +9,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import poc.demo.product.Product;
-import poc.demo.product.ProductRepository;
-
 @RestController
 @RequestMapping(path = "/products", method = GET)
 public class ProductQueryController {

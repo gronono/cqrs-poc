@@ -3,12 +3,13 @@ package poc.demo.product.command;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import poc.cqrs.command.Command;
+import poc.cqrs.spring.Command;
 
 /**
  * Permet de créer des nouveaux produits.
  */
-public class CreateProductCommand implements Command {
+@Command(name = "create-product")
+public class CreateProductCommand {
 
 	private String name;
 	
@@ -23,6 +24,6 @@ public class CreateProductCommand implements Command {
 
 	@Override
 	public String toString() {
-		return String.format("NewProductCommand [name=%s]", name);
+		return String.format("CreateProductCommand [name=%s]", name);
 	}
 }

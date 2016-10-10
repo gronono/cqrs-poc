@@ -1,32 +1,38 @@
 package poc.cqrs.command.impl;
 
-import java.util.UUID;
+import java.lang.reflect.Method;
+import java.util.Collection;
+import java.util.Collections;
 
-import poc.cqrs.command.Command;
+import org.apache.commons.lang3.reflect.MethodUtils;
+
+import poc.cqrs.command.Aggregate;
 import poc.cqrs.command.CommandBus;
-import poc.cqrs.command.CommandDispatcher;
 import poc.cqrs.command.CommandHandler;
 import poc.cqrs.command.InvalidCommandException;
 
-/**
- * Implémenation de {@link CommandBus} déléguant 
- * le choix du {@link CommandHandler} à un {@link CommandDispatcher}.
- */
 public class DefaultCommandBus implements CommandBus {
 
-	private CommandDispatcher dispatcher;
-
-	/**
-	 * Construit le {@link CommandBus}.
-	 * 
-	 * @param dispatcher Le dispatcher permettant de choisir le {@link CommandHandler} traitant la commande.
-	 */
-	public DefaultCommandBus(CommandDispatcher dispatcher) {
-		this.dispatcher = dispatcher;
+	private Collection<CommandHandler<?>> handlers;
+	
+	public DefaultCommandBus(Collection<CommandHandler<?>> handlers) {
+		this.handlers = Collections.unmodifiableCollection(handlers);
 	}
 	
-	public UUID send(Command command) throws InvalidCommandException {
-		CommandHandler<Command> handler = dispatcher.dispatch(command);
-		return handler.handle(command);
+	@Override
+	public Aggregate send(Object command) throws InvalidCommandException {
+		return dispatch(command).handle(command);
+	}
+	
+	private <C> CommandHandler<C> dispatch(Object command) {
+		for (CommandHandler<?> handler : handlers) {
+			Method handleMethod = MethodUtils.getAccessibleMethod(handler.getClass(), CommandHandler.HANDLE_METHOD_NAME, command.getClass());
+			if (handleMethod != null) {
+				@SuppressWarnings("unchecked")
+				CommandHandler<C> result = (CommandHandler<C>) handler;
+				return result;
+			}
+		}
+		throw new IllegalStateException("Aucun handler ne peut traiter " + command);
 	}
 }

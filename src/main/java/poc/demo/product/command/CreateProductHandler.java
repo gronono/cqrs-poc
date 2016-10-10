@@ -4,26 +4,30 @@ import java.util.UUID;
 
 import org.springframework.stereotype.Service;
 
+import poc.cqrs.command.Aggregate;
 import poc.cqrs.command.CommandHandler;
-import poc.cqrs.command.CommandHandlerFor;
 import poc.cqrs.command.InvalidCommandException;
-import poc.demo.product.Product;
-import poc.demo.product.ProductRepository;
+import poc.cqrs.event.EventBus;
+import poc.demo.Aggregates;
+import poc.demo.product.event.ProductCreatedEvent;
 
 @Service
-@CommandHandlerFor(command = CreateProductCommand.class, path = "create-product")
 public class CreateProductHandler implements CommandHandler<CreateProductCommand> {
 
-	private ProductRepository repo;
-
-	public CreateProductHandler(ProductRepository repo) {
-		this.repo = repo;
+	private EventBus eventBus;
+	
+	public CreateProductHandler(EventBus eventBus) {
+		this.eventBus = eventBus;
 	}
 	
 	@Override
-	public UUID handle(CreateProductCommand command) throws InvalidCommandException {
+	public Aggregate handle(CreateProductCommand command) throws InvalidCommandException {
 		System.err.println("Création du produit " + command.getName());
-		Product saved = this.repo.save(new Product(command.getName()));
-		return saved.getUuid();
+		
+		UUID id = UUID.randomUUID();
+		Aggregate aggregate = new Aggregate(id, Aggregates.PRODUCTS);
+		eventBus.apply(aggregate, new ProductCreatedEvent(id, command.getName()));
+		
+		return aggregate;
 	}
 }
