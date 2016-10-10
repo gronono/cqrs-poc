@@ -12,11 +12,11 @@ import org.springframework.context.annotation.Import;
 import poc.cqrs.command.CommandBus;
 import poc.cqrs.event.EventStore;
 import poc.cqrs.event.impl.JdbcEventStore;
-import poc.cqrs.spring.CqrsConfig;
+import poc.cqrs.spring.CqrsEsConfig;
 import poc.demo.product.command.CreateProductCommand;
 
 @SpringBootApplication
-@Import(CqrsConfig.class)
+@Import(CqrsEsConfig.class)
 public class DemoApplication {
 
 	public static void main(String[] args) {

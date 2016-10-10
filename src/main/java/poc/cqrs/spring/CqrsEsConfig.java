@@ -17,7 +17,7 @@ import poc.cqrs.event.impl.DefaultEventBus;
 
 @Configuration
 @Import(CommandRegistrar.class)
-public class CqrsConfig {
+public class CqrsEsConfig {
 
 	@Bean
 	public CommandBus commandBus(Collection<CommandHandler<?>> handlers) {
