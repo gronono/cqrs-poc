@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import poc.cqrs.event.EventListener;
-import poc.demo.product.query.Product;
 import poc.demo.product.query.ProductRepository;
 
 @Service
@@ -19,8 +18,6 @@ public class ProductCreatedEventListener implements EventListener<ProductCreated
 
 	@Override
 	public void onEvent(ProductCreatedEvent event) {
-		Product product = new Product(event.getId(), event.getName());
-		repo.save(product);
+		repo.save(event.getProduct());
 	}
-
 }

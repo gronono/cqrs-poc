@@ -7,7 +7,7 @@ public interface EventStore {
 
 	String applyOn();
 	
-	void save(UUID aggregateId, Object event);
+	void save(EventStoreEntry entry);
 	
-	List<Object> read(UUID aggregateId);
+	List<EventStoreEntry> read(UUID aggregateId);
 }

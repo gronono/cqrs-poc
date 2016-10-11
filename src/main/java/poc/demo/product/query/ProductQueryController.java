@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class ProductQueryController {
 
 	private ProductRepository repo;
+	private ProductSearch search;
 	
 	@Autowired
-	public ProductQueryController(ProductRepository repo) {
+	public ProductQueryController(ProductRepository repo, ProductSearch search) {
 		this.repo = repo;
+		this.search = search;
 	}
 	
 	@RequestMapping
@@ -28,5 +30,10 @@ public class ProductQueryController {
 	@RequestMapping(path = "/{id}")
 	public Product get(@PathVariable UUID id) {
 		return repo.findOne(id);
+	}
+	
+	@RequestMapping(path = "/search/{name}")
+	public Iterable<Product> get(@PathVariable String name) {
+		return search.searchProduct(name);
 	}
 }

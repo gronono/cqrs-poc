@@ -101,5 +101,8 @@ public class ProductSearchTest {
 		assertThat(search.searchProduct("odio")).size().isEqualTo(1);
 		assertThat(search.searchProduct("eaudio")).size().isEqualTo(1);
 		assertThat(search.searchProduct("eaudieau")).size().isEqualTo(1);
+		
+		repo.save(new Product("phonétique"));
+		assertThat(search.searchProduct("fonetique")).size().isEqualTo(1);
 	}
 }

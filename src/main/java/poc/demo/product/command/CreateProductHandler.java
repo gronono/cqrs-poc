@@ -32,10 +32,12 @@ public class CreateProductHandler implements CommandHandler<CreateProductCommand
 		
 		List<Product> products = search.searchProduct(command.getName());
 		if (products.isEmpty()) {
-			System.err.println("Création du produit " + command.getName());
 			UUID id = UUID.randomUUID();
-			Aggregate aggregate = new Aggregate(id, Aggregates.PRODUCTS);
-			eventBus.apply(aggregate, new ProductCreatedEvent(id, command.getName()));
+			System.err.println("Création du produit " + command.getName() + " " + id.toString());
+			
+			Aggregate aggregate = new Aggregate(Aggregates.PRODUCTS, id);
+			
+			eventBus.apply(aggregate, new ProductCreatedEvent(new Product(id, command.getName())));
 			return aggregate;
 		}
 

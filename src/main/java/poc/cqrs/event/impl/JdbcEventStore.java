@@ -8,7 +8,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -19,6 +18,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import poc.cqrs.event.EventStore;
+import poc.cqrs.event.EventStoreEntry;
 
 public class JdbcEventStore implements EventStore {
 
@@ -33,15 +33,15 @@ public class JdbcEventStore implements EventStore {
 	}
 	
 	@Override
-	public void save(UUID aggregateId, Object event) {
+	public void save(EventStoreEntry entry) {
 		String query = format("insert into %s (id, aggregate, created, type, payload) values (?, ?, ?, ?, ?)", tableName());
 		try (Connection connection = datasource.getConnection()) {
 			try (PreparedStatement statement = connection.prepareStatement(query)) {
-				statement.setString(1, UUID.randomUUID().toString());
-				statement.setString(2, aggregateId.toString());
-				statement.setTimestamp(3, Timestamp.from(Instant.now()));
-				statement.setString(4, event.getClass().getName());
-				statement.setString(5, toJSON(event));
+				statement.setString(1, entry.getId().toString());
+				statement.setString(2, entry.getAggregateId().toString());
+				statement.setTimestamp(3, Timestamp.from(entry.getCreated()));
+				statement.setString(4, entry.getPayload().getClass().getName());
+				statement.setString(5, toJSON(entry.getPayload()));
 				statement.executeUpdate();
 			}
 		} catch (SQLException | JsonProcessingException e) {
@@ -51,17 +51,20 @@ public class JdbcEventStore implements EventStore {
 	}
 
 	@Override
-	public List<Object> read(UUID aggregateId) {
-		List<Object> result = new ArrayList<>();
+	public List<EventStoreEntry> read(UUID aggregateId) {
+		List<EventStoreEntry> result = new ArrayList<>();
 		String query = format("select id, aggregate, created, type, payload from %s where aggregate = ? order by created", tableName());
 		try (Connection connection = datasource.getConnection()) {
 			try (PreparedStatement statement = connection.prepareStatement(query)) {
 				statement.setString(1, aggregateId.toString());
 				try (ResultSet rs = statement.executeQuery()) {
 					while (rs.next()) {
-						String type = rs.getString("type");
-						String payload = rs.getString("payload");
-						result.add(fromJSON(type, payload));
+						EventStoreEntry entry = new EventStoreEntry(
+								UUID.fromString(rs.getString("id")), 
+								UUID.fromString(rs.getString("aggregate")),
+								rs.getTimestamp("created").toInstant(),
+								fromJSON(rs.getString("type"), rs.getString("payload")));
+						result.add(entry);
 					}
 				}
 			}

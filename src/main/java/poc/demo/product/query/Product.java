@@ -13,6 +13,9 @@ import org.hibernate.search.annotations.Index;
 import org.hibernate.search.annotations.Indexed;
 import org.hibernate.search.annotations.Store;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import poc.demo.lucene.ApproximatifAnalyser;
@@ -31,7 +34,10 @@ public class Product {
 	@Field(index = Index.YES, analyze = Analyze.YES, store = Store.NO)
 	private String name;
 	
-	public Product(UUID id, String name) {
+	private Long price;
+	
+	@JsonCreator
+	public Product(@JsonProperty("id") UUID id, @JsonProperty("name") String name) {
 		this.id = id;
 		this.name = name;
 	}

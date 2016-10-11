@@ -24,13 +24,6 @@ public class DemoApplication {
 
 	public static void main(String[] args) {
 		ApplicationContext context = SpringApplication.run(DemoApplication.class, args);
-//		for (String s : context.getBeanDefinitionNames()) {
-//			System.out.println(s);
-//		}
-		
-		System.exit(0);
-		
-		
 	}
 
 //	@Bean
@@ -51,36 +44,11 @@ public class DemoApplication {
 	public CommandLineRunner run(CommandBus commandBus) {
 		return (args) -> {
 			commandBus.send(new CreateProductCommand("Soyo"));
-//			commandBus.send(new CreateProductCommand("Soïo"));
-//			commandBus.send(new CreateProductCommand("Soio"));
-			
 			commandBus.send(new CreateProductCommand("arbre"));
-			
-			// Test élision
-//			commandBus.send(new CreateProductCommand("l'arbre"));
-			
-			// Test maj
-//			commandBus.send(new CreateProductCommand("lE Arbre"));
-			
-			
 			commandBus.send(new CreateProductCommand("chat"));
-			
-//			commandBus.send(new CreateProductCommand("the"));
-//			commandBus.send(new CreateProductCommand("thé"));
-			
-			
 			commandBus.send(new CreateProductCommand("noisety"));
-//			commandBus.send(new CreateProductCommand("noiseti"));
-//			commandBus.send(new CreateProductCommand("noizeti"));
-//			commandBus.send(new CreateProductCommand("noisaiti"));
-//			commandBus.send(new CreateProductCommand("nois7ti"));
-			
 			commandBus.send(new CreateProductCommand("nutella"));
-//			commandBus.send(new CreateProductCommand("nutéla"));
-//			commandBus.send(new CreateProductCommand("nutela"));
-//			
 			commandBus.send(new CreateProductCommand("arnaud"));
-			commandBus.send(new CreateProductCommand("arno"));
 		};
 	}
 }

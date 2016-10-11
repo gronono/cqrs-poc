@@ -1,8 +1,10 @@
 package poc.cqrs.event.impl;
 
 import java.lang.reflect.Method;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.UUID;
 
 import org.apache.commons.lang3.reflect.MethodUtils;
 
@@ -10,6 +12,7 @@ import poc.cqrs.command.Aggregate;
 import poc.cqrs.event.EventBus;
 import poc.cqrs.event.EventListener;
 import poc.cqrs.event.EventStore;
+import poc.cqrs.event.EventStoreEntry;
 
 public class DefaultEventBus implements EventBus {
 
@@ -47,6 +50,9 @@ public class DefaultEventBus implements EventBus {
 	
 	private void saveInStore(Aggregate aggregate, Object event) {
 		EventStore store = lookup.lookup(aggregate.getType());
-		store.save(aggregate.getId(), event);
+		
+		EventStoreEntry entry = new EventStoreEntry(UUID.randomUUID(), aggregate.getId(), Instant.now(), event);
+		store.save(entry);
 	}
+	
 }

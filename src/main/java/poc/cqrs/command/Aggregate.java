@@ -7,9 +7,9 @@ public class Aggregate {
 	private UUID id;
 	private String type;
 	
-	public Aggregate(UUID id, String type) {
-		this.id = id;
+	public Aggregate(String type, UUID id) {
 		this.type = type;
+		this.id = id;
 	}
 	
 	public String getType() {

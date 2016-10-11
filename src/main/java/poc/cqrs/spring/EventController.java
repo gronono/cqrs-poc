@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import poc.cqrs.event.EventStore;
+import poc.cqrs.event.EventStoreEntry;
 import poc.cqrs.event.impl.EventStoreLookup;
 import poc.cqrs.event.impl.EventStoreLookup.NoSuchStoreException;
 
@@ -40,10 +41,12 @@ public class EventController {
 	public ResponseEntity<?> get(@PathVariable String aggregateType, @PathVariable String aggregateId) {
 		try {
 			EventStore store = lookup.lookup(aggregateType);
-			List<Object> events = store.read(UUID.fromString(aggregateId));
+			List<EventStoreEntry> events = store.read(UUID.fromString(aggregateId));
 			
 			if (events.isEmpty()) {
-				return new ResponseEntity<>(String.format("L'aggregat %s/%s n'existe pas", aggregateType, aggregateId), HttpStatus.NOT_FOUND);
+				return new ResponseEntity<>(
+						String.format("L'aggregat %s/%s n'existe pas", aggregateType, aggregateId), 
+						HttpStatus.NOT_FOUND);
 			}
 			
 			return new ResponseEntity<>(events, HttpStatus.OK);

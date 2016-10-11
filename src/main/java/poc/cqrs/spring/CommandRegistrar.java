@@ -35,6 +35,7 @@ import poc.cqrs.command.impl.DefaultCommandRegistry;
 	private Map<String, Class<?>> findCommands() {
 		ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false);
 		scanner.addIncludeFilter(new AnnotationTypeFilter(Command.class));
+		// TODO scan package
 		Set<BeanDefinition> defs = scanner.findCandidateComponents("poc");
 		return defs.stream()
 				.map(def -> def.getBeanClassName())
